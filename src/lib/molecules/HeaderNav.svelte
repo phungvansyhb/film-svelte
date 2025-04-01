@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Image from '$lib/atoms/Image.svelte';
+	import Logo from '$lib/assets/logo-removebg-6.png?enhanced';
 	let selectedItem = $state(0);
 	function setSelectedItem(id: number) {
 		selectedItem = id;
@@ -6,7 +8,7 @@
 </script>
 
 <nav class="nav-header">
-	<div>LOGO</div>
+	<Image src={Logo} alt="Logo" className="h-[80px] w-auto cursor-pointer" />
 	<ul class="nav-menu">
 		<li><span>Home<span></span></span></li>
 		<li onmouseenter={() => setSelectedItem(1)} onmouseleave={() => setSelectedItem(0)}>
