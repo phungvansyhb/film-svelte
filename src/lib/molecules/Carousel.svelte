@@ -12,7 +12,7 @@
 
 	let { movies, className, activeMovie = $bindable() }: CarouselProps = $props();
 
-	let options = { loop: true  };
+	let options = { loop: true };
 	let plugins = [Autoplay()];
 
 	function handleSetActiveSlide(movie: MovieLatestList['items'][number]) {
@@ -35,7 +35,7 @@
 					src={movie.thumb_url}
 					alt=""
 					class={`{w-full mb-4 cursor-pointer rounded-lg object-cover transition-transform duration-150 
-					${movie._id === activeMovie._id ? 'h-[340px] shadow-2xl brightness-100' : 'h-[240px] brightness-50'}  }`}
+					${movie._id === activeMovie._id ? 'h-[340px] shadow-2xl brightness-125 backdrop-blur-3xl' : 'h-[240px] brightness-75'}  }`}
 				/>
 				<span class="cursor-pointer">{movie.name}</span>
 			</div>

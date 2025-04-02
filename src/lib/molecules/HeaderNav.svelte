@@ -8,11 +8,10 @@
 	let bookmarks = $state(initialBookmarks);
 
 	$effect(() => {
-		bookmarkStore.subscribe(value => {
+		bookmarkStore.subscribe((value) => {
 			bookmarks = value;
 		});
 	});
-
 
 	let selectedItem = $state(0);
 
@@ -21,14 +20,11 @@
 	}
 
 	type HeaderDataProps = {
-		countries : CountryItem[],
-		categories : CategoryItem[]
-	}
+		countries: CountryItem[];
+		categories: CategoryItem[];
+	};
 
-	const {countries , categories} : HeaderDataProps = $props()
-	
-
-
+	const { countries, categories }: HeaderDataProps = $props();
 </script>
 
 <nav class="nav-header">
@@ -43,7 +39,7 @@
 				{/each}
 			</div>
 		</li>
-		<li onmouseenter={() => setSelectedItem(2)} onmouseleave={() => setSelectedItem(0)} >
+		<li onmouseenter={() => setSelectedItem(2)} onmouseleave={() => setSelectedItem(0)}>
 			<dt>Quốc gia</dt>
 			<div class={['nav-menu-item-dropdown', selectedItem === 2 ? 'flex' : '!hidden']}>
 				{#each countries as country (country._id)}
@@ -51,7 +47,7 @@
 				{/each}
 			</div>
 		</li>
-		<li onmouseenter={() => setSelectedItem(3)} onmouseleave={() => setSelectedItem(0)} >
+		<li onmouseenter={() => setSelectedItem(3)} onmouseleave={() => setSelectedItem(0)}>
 			<dt>Danh sách</dt>
 			<div class={['nav-menu-item-dropdown', selectedItem === 3 ? 'flex' : '!hidden']}>
 				<dl>Phim lẻ</dl>
@@ -62,11 +58,14 @@
 		</li>
 	</ul>
 	<div class="icons-group">
-		<span class="icon-[ic--outline-search] " role="button" aria-label="Tìm kiếm phim"></span>
-		<span class="icon-[material-symbols--bookmark] " role="button" aria-label="Danh sách xem sau"
-		onclick={()=>bookmarkStore.toggleWatchList()}
-		tabindex="0"
-		onkeydown={()=>bookmarkStore.toggleWatchList()}
+		<span class="icon-[ic--outline-search]" role="button" aria-label="Tìm kiếm phim"></span>
+		<span
+			class="icon-[material-symbols--bookmark]"
+			role="button"
+			aria-label="Danh sách xem sau"
+			onclick={() => bookmarkStore.toggleWatchList()}
+			tabindex="0"
+			onkeydown={() => bookmarkStore.toggleWatchList()}
 		></span>
 	</div>
 </nav>
@@ -96,20 +95,20 @@
 		}
 	}
 	.nav-menu-item-dropdown {
-		@apply absolute top-20 left-0 w-full flex justify-center flex-wrap gap-6 rounded-b-lg px-6 py-6 shadow-xl;
+		@apply absolute top-20 left-0 flex w-full flex-wrap gap-6 rounded-b-lg px-6 py-6 shadow-xl;
 		background-color: rgba(0, 0, 0, 0.9);
 		& > dl {
-			width: 110px;
+			width: 140px;
 		}
 		& > dl:hover {
 			@apply text-teal-500;
 		}
 	}
 
-	.icons-group{
+	.icons-group {
 		@apply flex gap-4;
-		span { 
-			@apply text-2xl text-white cursor-pointer;
+		span {
+			@apply cursor-pointer text-2xl text-white;
 		}
 	}
 </style>

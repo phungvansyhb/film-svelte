@@ -16,15 +16,15 @@
 	let bookmarks = $state(initialBookmarks);
 
 	$effect(() => {
-		bookmarkStore.subscribe(value => {
+		bookmarkStore.subscribe((value) => {
 			bookmarks = value;
 		});
 	});
 
 	function isInWatchLater(movieId: string) {
-		return bookmarks.watchLater.some(m => m._id === movieId);
+		return bookmarks.watchLater.some((m) => m._id === movieId);
 	}
-	
+
 	function toggleWatchLater() {
 		if (isInWatchLater(activeMovie._id)) {
 			bookmarkStore.removeFromWatchLater(activeMovie._id);
@@ -32,75 +32,92 @@
 			bookmarkStore.addToWatchLater(activeMovie);
 		}
 	}
-
-	
 </script>
 
-<section
-	class="background-fullpage"
-	style="background-image: url({activeMovie.poster_url}), linear-gradient(to bottom, #1a1a1a, #000000);"
-></section>
+<div class="background-container">
+	<section class="background-fullpage" style="--bg-image: url({activeMovie.poster_url})"></section>
+	<section class="background-fullpage" style="--bg-image: url({activeMovie.poster_url})"></section>
+</div>
 <div class="background-fullpage-holder">
 	<section class="container mx-auto">
 		<div class="movie-info">
-			<h2>{activeMovie.name}  </h2>
-			<br/>
+			<h2>{activeMovie.name}</h2>
+			<br />
 			<desc class="pt-6 text-2xl opacity-75">( {activeMovie.origin_name} )</desc>
-			
-			<div class="flex items-end gap-2 mt-8">
+
+			<div class="mt-8 flex items-end gap-2">
 				<span class="font-bold">
 					{activeMovie.tmdb.vote_average.toPrecision(2)}
 				</span>
-				<span class="icon-[material-symbols--star-rounded] star-icon"></span> 
+				<span class="icon-[material-symbols--star-rounded] star-icon"></span>
 				<span class="opacity-75">/ {activeMovie.tmdb.vote_count} đánh giá</span>
-				<span class="opacity-75">/ {activeMovie.year } </span>
+				<span class="opacity-75">/ {activeMovie.year} </span>
 			</div>
 		</div>
 		<div class="action-button-group">
-			<Button size="lg" type="button" title="Xem phim" >
+			<Button size="lg" type="button" title="Xem phim">
 				<a href={activeMovie.slug} aria-label={activeMovie.slug}>
 					<span class="icon-[solar--play-bold]"></span>
 				</a>
 			</Button>
-			<Button 
-				size="lg" 
-				type="button" 
-				title={isInWatchLater(activeMovie._id) ? "Đã lưu" : "Xem sau"}
+			<Button
+				size="lg"
+				type="button"
+				title={isInWatchLater(activeMovie._id) ? 'Đã lưu' : 'Xem sau'}
 				onclick={toggleWatchLater}
 			>
-				<span class={isInWatchLater(activeMovie._id) ? "icon-[material-symbols--bookmark]" : "icon-[mingcute--add-fill]"}></span>
+				<span
+					class={isInWatchLater(activeMovie._id)
+						? 'icon-[material-symbols--bookmark]'
+						: 'icon-[mingcute--add-fill]'}
+				></span>
 			</Button>
-			
 		</div>
 	</section>
 
 	<section class="mt-8">
-		<Carousel {movies} bind:activeMovie={activeMovie} />
+		<Carousel {movies} bind:activeMovie />
 	</section>
 </div>
 
-<WatchLaterModal 
-	isOpen={bookmarks.isShowWatchLater} 
-	onClose={() => bookmarkStore.toggleWatchList()} 
+<WatchLaterModal
+	isOpen={bookmarks.isShowWatchLater}
+	onClose={() => bookmarkStore.toggleWatchList()}
 />
 
 <style>
 	@reference "tailwindcss";
 
+	.background-container {
+		@apply absolute top-0 left-0 z-0 h-screen w-screen overflow-hidden;
+	}
+
 	.background-fullpage {
-		@apply absolute top-0 left-0 z-0 h-screen w-screen object-center brightness-25 
-		transition-all duration-300;
+		@apply absolute inset-0 object-center brightness-50;
 		background-position: center;
 		background-repeat: no-repeat;
 		background-size: cover;
+		background-image: var(--bg-image), linear-gradient(to bottom, #1a1a1a, #000000);
+		opacity: 0;
+		transition: opacity 1s ease-in-out;
 	}
+
+	.background-fullpage:first-child {
+		opacity: 1;
+	}
+
+	.background-fullpage:last-child {
+		opacity: 0;
+		transition-delay: 0.5s;
+	}
+
 	.background-fullpage-holder {
 		@apply flex flex-col justify-between py-24;
 		position: relative;
 		height: calc(100vh - 80px);
 	}
 	.movie-info {
-		@apply text-white lg:w-1/2 leading-8;
+		@apply leading-8 text-white lg:w-1/2;
 		h2 {
 			@apply text-5xl font-semibold;
 		}

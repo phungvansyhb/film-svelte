@@ -13,7 +13,7 @@
 
 	$effect(() => {
 		if (browser) {
-			bookmarkStore.subscribe(value => {
+			bookmarkStore.subscribe((value) => {
 				bookmarks = value;
 			});
 		}
@@ -29,7 +29,14 @@
 		<div class="modal-content">
 			<div class="modal-header">
 				<h2>Danh sách xem sau</h2>
-				<button class="close-button" onclick={onClose} aria-label="close button">
+				<button
+					class="close-button"
+					onclick={(e) => {
+						e.stopPropagation();
+						onClose();
+					}}
+					aria-label="close button"
+				>
 					<span class="icon-[material-symbols--close]"></span>
 				</button>
 			</div>
@@ -45,8 +52,8 @@
 									<h3>{movie.name}</h3>
 									<p class="movie-year">{movie.year}</p>
 								</div>
-								<button 
-                                    aria-label="remove button"
+								<button
+									aria-label="remove button"
 									class="remove-button"
 									onclick={() => removeFromWatchLater(movie._id)}
 									title="Xóa khỏi danh sách"
@@ -66,33 +73,33 @@
 	@reference "tailwindcss";
 
 	.modal-overlay {
-		@apply fixed inset-0 bg-black  z-50 flex items-center justify-center;
+		@apply fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.9)];
 	}
 
 	.modal-content {
-		@apply bg-gray-900 rounded-lg w-full max-w-2xl max-h-[80vh] overflow-hidden;
+		@apply max-h-[80vh] w-full max-w-2xl overflow-hidden rounded-lg bg-gray-900;
 	}
 
 	.modal-header {
-		@apply flex items-center justify-between p-4 border-b border-gray-700;
+		@apply flex items-center justify-between border-b border-gray-700 p-4;
 		h2 {
 			@apply text-xl font-semibold text-white;
 		}
 	}
 
 	.close-button {
-		@apply text-gray-400 hover:text-white transition-colors p-2;
+		@apply cursor-pointer p-2 text-gray-400 transition-colors hover:text-white;
 		span {
 			@apply text-2xl;
 		}
 	}
 
 	.modal-body {
-		@apply p-4 overflow-y-auto max-h-[calc(80vh-4rem)];
+		@apply max-h-[calc(80vh-4rem)] overflow-y-auto p-4;
 	}
 
 	.empty-message {
-		@apply text-gray-400 text-center py-8;
+		@apply py-8 text-center text-gray-400;
 	}
 
 	.movie-list {
@@ -100,28 +107,28 @@
 	}
 
 	.movie-item {
-		@apply flex items-center gap-4 p-2 rounded-lg hover:bg-gray-800 transition-colors;
+		@apply flex items-center gap-4 rounded-lg p-2 transition-colors hover:bg-gray-800;
 	}
 
 	.movie-thumbnail {
-		@apply w-20 h-28 object-cover rounded;
+		@apply h-28 w-20 rounded object-cover;
 	}
 
 	.movie-info {
 		@apply flex-1;
 		h3 {
-			@apply text-white font-medium;
+			@apply font-medium text-white;
 		}
 	}
 
 	.movie-year {
-		@apply text-gray-400 text-sm mt-1;
+		@apply mt-1 text-sm text-gray-400;
 	}
 
 	.remove-button {
-		@apply text-gray-400 hover:text-red-500 transition-colors p-2;
+		@apply cursor-pointer p-2 text-gray-400 transition-colors hover:text-amber-500;
 		span {
 			@apply text-xl;
 		}
 	}
-</style> 
+</style>
