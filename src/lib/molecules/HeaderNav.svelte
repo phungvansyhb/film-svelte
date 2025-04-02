@@ -1,10 +1,34 @@
 <script lang="ts">
 	import Image from '$lib/atoms/Image.svelte';
 	import Logo from '$lib/assets/logo-removebg-6.png?enhanced';
+	import type { CountryItem } from '$lib/typeDefs/Country.type';
+	import type { CategoryItem } from '$lib/typeDefs/Category.type';
+	import { bookmarkStore, initialBookmarks } from '$lib/stores/bookmarkStore';
+
+	let bookmarks = $state(initialBookmarks);
+
+	$effect(() => {
+		bookmarkStore.subscribe(value => {
+			bookmarks = value;
+		});
+	});
+
+
 	let selectedItem = $state(0);
+
 	function setSelectedItem(id: number) {
 		selectedItem = id;
 	}
+
+	type HeaderDataProps = {
+		countries : CountryItem[],
+		categories : CategoryItem[]
+	}
+
+	const {countries , categories} : HeaderDataProps = $props()
+	
+
+
 </script>
 
 <nav class="nav-header">
@@ -14,40 +38,50 @@
 		<li onmouseenter={() => setSelectedItem(1)} onmouseleave={() => setSelectedItem(0)}>
 			<dt>Thể loại</dt>
 			<div class={['nav-menu-item-dropdown', selectedItem === 1 ? 'grid' : '!hidden']}>
-				<dl>Kinh dị</dl>
-				<dl>Hài hước</dl>
-				<dl>Dịch</dl>
-				<dl>Tình cảm</dl>
+				{#each categories as category (category._id)}
+					<dl>{category.name}</dl>
+				{/each}
 			</div>
 		</li>
-
-		<li onmouseenter={() => setSelectedItem(2)} onmouseleave={() => setSelectedItem(0)}>
+		<li onmouseenter={() => setSelectedItem(2)} onmouseleave={() => setSelectedItem(0)} >
 			<dt>Quốc gia</dt>
-			<div class={['nav-menu-item-dropdown', selectedItem === 2 ? 'grid' : '!hidden']}>
-				<dl>Trung Quốc</dl>
-				<dl>Hàn Quốc</dl>
-				<dl>Âu Mỹ</dl>
-				<dl>Việt Nam</dl>
+			<div class={['nav-menu-item-dropdown', selectedItem === 2 ? 'flex' : '!hidden']}>
+				{#each countries as country (country._id)}
+					<dl>{country.name}</dl>
+				{/each}
 			</div>
 		</li>
-		<li><span>Phim lẻ<span></span></span></li>
+		<li onmouseenter={() => setSelectedItem(3)} onmouseleave={() => setSelectedItem(0)} >
+			<dt>Danh sách</dt>
+			<div class={['nav-menu-item-dropdown', selectedItem === 3 ? 'flex' : '!hidden']}>
+				<dl>Phim lẻ</dl>
+				<dl>Phim bộ</dl>
+				<dl>Phim hoạt hình</dl>
+				<dl>TV show</dl>
+			</div>
+		</li>
 	</ul>
-	<div>
-		<span class="icon-[ic--outline-search] text-2xl text-white" role="button"></span>
+	<div class="icons-group">
+		<span class="icon-[ic--outline-search] " role="button" aria-label="Tìm kiếm phim"></span>
+		<span class="icon-[material-symbols--bookmark] " role="button" aria-label="Danh sách xem sau"
+		onclick={()=>bookmarkStore.toggleWatchList()}
+		tabindex="0"
+		onkeydown={()=>bookmarkStore.toggleWatchList()}
+		></span>
 	</div>
 </nav>
 
 <style>
 	@reference "tailwindcss";
 	.nav-header {
-		@apply sticky z-10 container mx-auto flex h-[80px] items-center justify-between;
+		@apply relative z-10 container mx-auto flex h-[80px] items-center justify-between;
 		/* border-bottom: 1px solid rgba(255, 255, 255, 0.15); */
 	}
 
 	.nav-menu {
 		@apply flex h-full cursor-pointer text-white;
 		& > li {
-			@apply relative h-full px-6 font-semibold transition-colors duration-150;
+			@apply h-full px-6 font-semibold transition-colors duration-150;
 			& > span,
 			dt {
 				line-height: 80px;
@@ -62,10 +96,20 @@
 		}
 	}
 	.nav-menu-item-dropdown {
-		@apply absolute top-20 left-0 grid w-max grid-cols-3 grid-rows-2 gap-6 rounded-b-lg px-6 py-6 shadow-xl;
-		background-color: rgba(0, 0, 0, 0.75);
+		@apply absolute top-20 left-0 w-full flex justify-center flex-wrap gap-6 rounded-b-lg px-6 py-6 shadow-xl;
+		background-color: rgba(0, 0, 0, 0.9);
+		& > dl {
+			width: 110px;
+		}
 		& > dl:hover {
 			@apply text-teal-500;
+		}
+	}
+
+	.icons-group{
+		@apply flex gap-4;
+		span { 
+			@apply text-2xl text-white cursor-pointer;
 		}
 	}
 </style>

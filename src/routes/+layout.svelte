@@ -1,8 +1,10 @@
 <script lang="ts">
 	import HeaderNav from '$lib/molecules/HeaderNav.svelte';
 	import '../app.css';
-	let { children } = $props();
+	import type { LayoutProps } from './$types';
+	
+	let { children, data }: LayoutProps = $props();
 </script>
 
-<HeaderNav/>
+<HeaderNav categories={data.categories.data.items} countries={data.countries.data.items} />
 {@render children()}

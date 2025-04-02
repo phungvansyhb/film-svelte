@@ -1,43 +1,43 @@
 <script lang="ts">
-	import Image from '$lib/atoms/Image.svelte';
+	import Image from '$lib/atoms/CdnImage.svelte';
 	import emblaCarouselSvelte from 'embla-carousel-svelte';
 	import Autoplay from 'embla-carousel-autoplay';
+	import type { MovieLatestList } from '$lib/typeDefs/MovieLatest.type';
 
 	type CarouselProps = {
-		images: any[];
+		movies: MovieLatestList['items'];
 		className?: string;
+		activeMovie: MovieLatestList['items'][number];
 	};
 
-	const { images, className }: CarouselProps = $props();
+	let { movies, className, activeMovie = $bindable() }: CarouselProps = $props();
 
-	let emblaApi;
-	let options = { loop: true };
+	let options = { loop: true  };
 	let plugins = [Autoplay()];
 
-	let activeSlide = $state(0);
-
-	function onInit(event: any) {
-		emblaApi = event.detail;
-		emblaApi.on(
-			'slidesInView',
-			(emblaInstance: any) => {
-                console.log(emblaInstance.slidesInView())
-                activeSlide = emblaInstance.slidesInView()[3]
-            }
-		);
+	function handleSetActiveSlide(movie: MovieLatestList['items'][number]) {
+		activeMovie = movie;
 	}
 </script>
 
-<div class="embla" use:emblaCarouselSvelte={{ options, plugins }} onemblaInit={onInit}>
+<div class="embla" use:emblaCarouselSvelte={{ options, plugins }}>
 	<div class={['embla__container', className]}>
-		{#each images as image, index (index)}
-			<div class={['embla__slide']}>
+		{#each movies as movie (movie._id)}
+			<div
+				class={['embla__slide']}
+				onclick={() => handleSetActiveSlide(movie)}
+				role="button"
+				tabindex="0"
+				onkeydown={() => handleSetActiveSlide(movie)}
+			>
 				<Image
-					src={image}
+					layout="fullWidth"
+					src={movie.thumb_url}
 					alt=""
-					className={`w-full cursor-pointer object-cover mb-4 rounded-lg transition-transform duration-75 ${index === activeSlide ? 'h-[320px] shadow-2xl' : 'h-[240px] brightness-50'}`}
+					class={`{w-full mb-4 cursor-pointer rounded-lg object-cover transition-transform duration-150 
+					${movie._id === activeMovie._id ? 'h-[340px] shadow-2xl brightness-100' : 'h-[240px] brightness-50'}  }`}
 				/>
-				<span>Khi cuộc đời cho bạn quả quýt</span>
+				<span class="cursor-pointer">{movie.name}</span>
 			</div>
 		{/each}
 	</div>
@@ -53,15 +53,15 @@
 		@apply flex items-end px-4;
 	}
 	.embla__slide {
-		@apply mr-8 min-w-0 overflow-hidden brightness-75 ;
-		flex: 0 0 18%;
+		@apply mr-8 min-w-0 overflow-hidden brightness-75;
+		flex: 0 0 160px;
 		span {
-			@apply line-clamp-2 text-center font-semibold text-white;
+			@apply line-clamp-2 h-12 font-semibold text-white;
 		}
 	}
 	@media (max-width: 768px) {
 		.embla__slide {
-			flex: 0 0 50%; /* Breakpoint SM slide covers 50% of the viewport */
+			flex: 0 0 160px; /* Breakpoint SM slide covers 50% of the viewport */
 		}
 	}
 </style>
