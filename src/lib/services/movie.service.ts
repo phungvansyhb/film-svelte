@@ -12,7 +12,8 @@ export async function getLatestMovie({ page }: Partial<ParamsSearch>) {
 		const data = (await response.json()) as MovieLatestList;
 		return data;
 	} catch (e) {
-		return e;
+		console.error(e);
+		return null;
 	}
 }
 
@@ -39,11 +40,13 @@ export async function getMovieCountry() {
 export async function getListMovieByType(type: string, params: Partial<ParamsSearch>) {
 	try {
 		const queryString = stringify(params, { skipNulls: true });
+		// console.log('http url', `https://ophim1.com/v1/api/danh-sach/${type}?${queryString}`)
 		const response = await fetch(`https://ophim1.com/v1/api/danh-sach/${type}?${queryString}`);
-		const data = (await response.json()) as MovieLatestList;
+		const data = (await response.json()) as MovieList;
 		return data;
 	} catch (e) {
-		return e;
+		console.error(e);
+		return null;
 	}
 }
 

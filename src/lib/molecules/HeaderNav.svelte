@@ -4,6 +4,7 @@
 	import type { CountryItem } from '$lib/typeDefs/Country.type';
 	import type { CategoryItem } from '$lib/typeDefs/Category.type';
 	import { bookmarkStore, initialBookmarks } from '$lib/stores/bookmarkStore';
+	import { goto, invalidate } from '$app/navigation';
 
 	let bookmarks = $state(initialBookmarks);
 

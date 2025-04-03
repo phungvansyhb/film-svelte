@@ -38,8 +38,8 @@
 					layout="fullWidth"
 					src={movie.thumb_url}
 					alt=""
-					class={`{w-full mb-4 cursor-pointer rounded-lg object-cover transition-all duration-150 
-					${movie._id === activeMovie._id ? 'h-[340px] shadow-2xl brightness-125 backdrop-blur-3xl' : 'h-[240px] brightness-75'}  }`}
+					class={`{w-full mb-4 cursor-pointer rounded-lg object-cover transition-all duration-500 ease-linear 
+					${movie._id === activeMovie._id ? 'h-[320px] shadow-2xl brightness-125 backdrop-blur-3xl' : 'h-[240px] brightness-75'}  }`}
 				/>
 				<span class="cursor-pointer">{movie.name}</span>
 			</div>
@@ -54,13 +54,13 @@
 		overflow: hidden;
 	}
 	.embla__container {
-		@apply flex items-end px-4;
+		@apply flex items-center px-4;
 	}
 	.embla__slide {
 		@apply mr-8 min-w-0 overflow-hidden brightness-75;
 		flex: 0 0 160px;
 		span {
-			@apply line-clamp-2 h-12 font-semibold text-white;
+			@apply line-clamp-2 h-10 text-sm font-medium text-white;
 		}
 		/* &:focus {
 			@apply outline outline-offset-8 outline-teal-500 brightness-100;

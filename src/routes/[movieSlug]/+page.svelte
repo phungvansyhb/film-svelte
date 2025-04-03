@@ -5,26 +5,30 @@
 	import MoviePlay from '$lib/organism/movieDetail/MoviePlay.svelte';
 	import type { PageData } from './$types';
 	import type { Episode } from '$lib/typeDefs/MovieDetailContext.type';
-    
+
 	const { data }: { data: PageData } = $props();
 
-	let currentServer = $state(data.data.item.episodes && data.data.item.episodes.length > 0 
-		? data.data.item.episodes[0].server_name
-		: null);
-	let currentEpisode = $state(data.data.item.episodes && data.data.item.episodes.length > 0 
-		? data.data.item.episodes[0].server_data[0] 
-		: null);
+	let currentServer = $state(
+		data.data.item.episodes && data.data.item.episodes.length > 0
+			? data.data.item.episodes[0].server_name
+			: null
+	);
+	let currentEpisode = $state(
+		data.data.item.episodes && data.data.item.episodes.length > 0
+			? data.data.item.episodes[0].server_data[0]
+			: null
+	);
 
 	let videoSourceType = $state<'m3u8' | 'embeded'>('embeded');
-	
+
 	let showM3U8Note = $state(false);
-	
+
 	function playEpisode(episode: Episode) {
 		currentEpisode = episode;
-		videoSourceType = 'embeded'; 
+		videoSourceType = 'embeded';
 		showM3U8Note = false;
 	}
-	
+
 	function toggleVideoSource() {
 		videoSourceType = videoSourceType === 'embeded' ? 'm3u8' : 'embeded';
 		if (videoSourceType === 'm3u8') {
@@ -41,7 +45,7 @@
 	<meta property="og:description" content={data.data.seoOnPage.descriptionHead} />
 	<meta property="og:url" content={data.data.seoOnPage.og_url} />
 	{#each data.data.seoOnPage.og_image as image}
-		<meta property="og:image" content={`https://img.ophim.live/uploads/${image}`} />
+		<meta property="og:image" content={`https://img.ophim.live/uploads/movies/${image}`} />
 	{/each}
 
 	{#if data.data.seoOnPage.updated_time}
@@ -63,20 +67,15 @@
 	<div class="container mx-auto">
 		<Breadcrumbs items={data.data.breadCrumb} />
 		<div class="movie-detail mt-6">
-			<MoviePlay 
+			<MoviePlay
 				movieName={data.data.item.name}
 				{currentEpisode}
 				{videoSourceType}
 				{toggleVideoSource}
 				{showM3U8Note}
-				poster={`https://img.ophim.live/uploads/${data.data.item.thumb_url}`}
+				poster={`https://img.ophim.live/uploads/movies/${data.data.item.poster_url}`}
 			/>
-			<MovieEpisode 
-				data={data.data.item.episodes} 
-				{currentEpisode}
-				{currentServer}
-				{playEpisode}
-			/>
+			<MovieEpisode data={data.data.item.episodes} {currentEpisode} {currentServer} {playEpisode} />
 			<MovieInfo data={data.data.item} />
 		</div>
 	</div>
