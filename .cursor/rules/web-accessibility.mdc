@@ -1,0 +1,15 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+
+# Your rule content
+
+when code related html, it must accesibility
+for example : interactable element like button , a must have arial label , tabIndex
+
+non interactable have event click, ... must have role, tabindex
+
+
+

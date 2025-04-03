@@ -1,41 +1,78 @@
 <script lang="ts">
-	import type { MovieLatestList } from '$lib/typeDefs/MovieLatest.type';
-	import { bookmarkStore } from '$lib/stores/bookmarkStore';
-	import { browser } from '$app/environment';
+	import { bookmarkStore, initialBookmarks } from '$lib/stores/bookmarkStore';
 
-	type Props = {
-		isOpen: boolean;
-		onClose: () => void;
-	};
-
-	const { isOpen, onClose } = $props();
-	let bookmarks = $state<{ watchLater: MovieLatestList['items'] }>({ watchLater: [] });
+	let bookmarks = $state(initialBookmarks);
+	let modalRef = $state<HTMLDivElement | null>(null);
+	let closeButtonRef = $state<HTMLButtonElement | null>(null);
 
 	$effect(() => {
-		if (browser) {
-			bookmarkStore.subscribe((value) => {
-				bookmarks = value;
-			});
-		}
+		bookmarkStore.subscribe((value) => {
+			bookmarks = value;
+		});
 	});
 
 	function removeFromWatchLater(movieId: string) {
 		bookmarkStore.removeFromWatchLater(movieId);
 	}
+
+	function handleKeydown(event: KeyboardEvent) {
+		if (event.key === 'Escape') {
+			bookmarkStore.toggleWatchList(false);
+		}
+	}
+
+	function handleTabKey(event: KeyboardEvent) {
+		if (event.key !== 'Tab' || !modalRef) return;
+
+		const focusableElements = Array.from(modalRef.querySelectorAll(
+			'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+		)) as HTMLElement[];
+		
+		const currentIndex = focusableElements.indexOf(document.activeElement as HTMLElement);
+		const nextIndex = event.shiftKey 
+			? (currentIndex <= 0 ? focusableElements.length - 1 : currentIndex - 1)
+			: (currentIndex >= focusableElements.length - 1 ? 0 : currentIndex + 1);
+
+		focusableElements[nextIndex].focus();
+		event.preventDefault();
+	}
+
+	$effect(() => {
+		if (bookmarks.isShowWatchLater) {
+			// Focus close button when modal opens
+			closeButtonRef?.focus();
+			// Prevent scrolling on body
+			document.body.style.overflow = 'hidden';
+		} else {
+			// Restore scrolling when modal closes
+			document.body.style.overflow = '';
+		}
+	});
 </script>
 
-{#if isOpen}
-	<div class="modal-overlay" onclick={onClose} role="button" tabindex="0" onkeydown={onClose}>
-		<div class="modal-content">
+<svelte:window on:keydown={handleKeydown}/>
+
+{#if bookmarks.isShowWatchLater}
+	<div class="modal-overlay">
+		<div 
+			class="modal-content"
+			bind:this={modalRef}
+			onkeydown={handleTabKey}
+			role="dialog"
+			aria-modal="true"
+			tabindex="0"
+		>
 			<div class="modal-header">
 				<h2>Danh sách xem sau</h2>
 				<button
 					class="close-button"
+					bind:this={closeButtonRef}
 					onclick={(e) => {
 						e.stopPropagation();
-						onClose();
+						bookmarkStore.toggleWatchList(false);
 					}}
 					aria-label="close button"
+					tabindex="0"
 				>
 					<span class="icon-[material-symbols--close]"></span>
 				</button>
@@ -57,6 +94,13 @@
 									class="remove-button"
 									onclick={() => removeFromWatchLater(movie._id)}
 									title="Xóa khỏi danh sách"
+									tabindex="0"
+									onkeydown={(e) => {
+										if (e.key === 'Enter' || e.key === ' ') {
+											e.preventDefault();
+											removeFromWatchLater(movie._id);
+										}
+									}}
 								>
 									<span class="icon-[material-symbols--delete]"></span>
 								</button>
@@ -91,6 +135,9 @@
 		@apply cursor-pointer p-2 text-gray-400 transition-colors hover:text-white;
 		span {
 			@apply text-2xl;
+		}
+		&:focus {
+			@apply outline-none ring-2 ring-white  rounded;
 		}
 	}
 

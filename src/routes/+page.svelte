@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Button from '$lib/atoms/Button.svelte';
 	import Carousel from '$lib/molecules/Carousel.svelte';
-	import WatchLaterModal from '$lib/molecules/WatchLaterModal.svelte';
 	import type { PageData } from './$types';
 	import { bookmarkStore, initialBookmarks } from '$lib/stores/bookmarkStore';
 
@@ -41,7 +40,9 @@
 <div class="background-fullpage-holder">
 	<section class="container mx-auto">
 		<div class="movie-info">
-			<h2>{activeMovie.name}</h2>
+			<h2>
+				{activeMovie.name}
+			</h2>
 			<br />
 			<desc class="pt-6 text-2xl opacity-75">( {activeMovie.origin_name} )</desc>
 
@@ -52,26 +53,26 @@
 				<span class="icon-[material-symbols--star-rounded] star-icon"></span>
 				<span class="opacity-75">/ {activeMovie.tmdb.vote_count} đánh giá</span>
 				<span class="opacity-75">/ {activeMovie.year} </span>
+				<button
+					class="ml-2 cursor-pointer rounded px-2 hover:bg-gray-900"
+					tabindex="0"
+					aria-label={isInWatchLater(activeMovie._id) ? 'Đã thích' : '+ Thêm vào xem sau'}
+					onclick={toggleWatchLater}
+					>{isInWatchLater(activeMovie._id) ? 'Đã thích' : '+ Thêm vào xem sau'}
+				</button>
 			</div>
 		</div>
 		<div class="action-button-group">
-			<Button size="lg" type="button" title="Xem phim">
-				<a href={activeMovie.slug} aria-label={activeMovie.slug}>
-					<span class="icon-[solar--play-bold]"></span>
-				</a>
-			</Button>
-			<Button
-				size="lg"
-				type="button"
-				title={isInWatchLater(activeMovie._id) ? 'Đã lưu' : 'Xem sau'}
-				onclick={toggleWatchLater}
+			<h3 class="text-2xl font-semibold text-white">Xem ngay</h3>
+			<a
+				href={activeMovie.slug}
+				aria-label={activeMovie.slug}
+				class="animate-pulse overflow-hidden rounded-full"
 			>
-				<span
-					class={isInWatchLater(activeMovie._id)
-						? 'icon-[material-symbols--bookmark]'
-						: 'icon-[mingcute--add-fill]'}
-				></span>
-			</Button>
+				<Button size="lg" type="button" title="Xem phim">
+					<span class="icon-[solar--play-bold] text-3xl"></span>
+				</Button>
+			</a>
 		</div>
 	</section>
 
@@ -79,11 +80,6 @@
 		<Carousel {movies} bind:activeMovie />
 	</section>
 </div>
-
-<WatchLaterModal
-	isOpen={bookmarks.isShowWatchLater}
-	onClose={() => bookmarkStore.toggleWatchList()}
-/>
 
 <style>
 	@reference "tailwindcss";
@@ -129,6 +125,6 @@
 		}
 	}
 	.action-button-group {
-		@apply mt-8 flex gap-4;
+		@apply mt-8 flex items-center gap-4;
 	}
 </style>

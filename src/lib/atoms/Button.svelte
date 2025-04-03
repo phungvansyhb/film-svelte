@@ -22,7 +22,7 @@
 		...rest
 	}: ButtonProps = $props();
 
-	const baseStyles = 'inline-flex items-center justify-center font-medium transition-colors rounded focus:outline-none cursor-pointer ';
+	const baseStyles = 'inline-flex items-center justify-center font-medium transition-colors rounded focus:outline-none cursor-pointer focus:ring-2 focus:ring-offset-2 focus:ring-teal-500';
 	
 	const variantStyles = {
 		primary: 'bg-teal-500 text-white hover:bg-teal-600 focus:ring-teal-500',
@@ -33,7 +33,7 @@
 	const sizeStyles = {
 		sm: 'px-3 py-1.5 text-sm',
 		md: 'px-4 py-2 text-base',
-		lg: 'px-6 py-3 text-lg'
+		lg: 'px-6 py-6 text-lg'
 	};
 
 	const buttonClasses = [

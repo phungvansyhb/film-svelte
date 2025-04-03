@@ -28,13 +28,17 @@
 				onclick={() => handleSetActiveSlide(movie)}
 				role="button"
 				tabindex="0"
-				onkeydown={() => handleSetActiveSlide(movie)}
+				onkeydown={(e) => {
+					if (e.key === 'Enter' || e.key === ' ') {
+						handleSetActiveSlide(movie);
+					}
+				}}
 			>
 				<Image
 					layout="fullWidth"
 					src={movie.thumb_url}
 					alt=""
-					class={`{w-full mb-4 cursor-pointer rounded-lg object-cover transition-transform duration-150 
+					class={`{w-full mb-4 cursor-pointer rounded-lg object-cover transition-all duration-150 
 					${movie._id === activeMovie._id ? 'h-[340px] shadow-2xl brightness-125 backdrop-blur-3xl' : 'h-[240px] brightness-75'}  }`}
 				/>
 				<span class="cursor-pointer">{movie.name}</span>
@@ -58,6 +62,9 @@
 		span {
 			@apply line-clamp-2 h-12 font-semibold text-white;
 		}
+		/* &:focus {
+			@apply outline outline-offset-8 outline-teal-500 brightness-100;
+		} */
 	}
 	@media (max-width: 768px) {
 		.embla__slide {

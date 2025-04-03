@@ -30,42 +30,70 @@
 <nav class="nav-header">
 	<Image src={Logo} alt="Logo" className="h-[80px] w-auto cursor-pointer" />
 	<ul class="nav-menu">
-		<li><span>Home<span></span></span></li>
-		<li onmouseenter={() => setSelectedItem(1)} onmouseleave={() => setSelectedItem(0)}>
-			<dt>Thể loại</dt>
+		<li><a href="/" tabindex="0" aria-label="Trang chủ">Home<span></span></a></li>
+		<li
+			onmouseenter={() => setSelectedItem(1)}
+			onmouseleave={() => setSelectedItem(0)}
+			onfocusin={() => setSelectedItem(1)}
+			onfocusout={() => setSelectedItem(0)}
+		>
+			<dt><a href="/the-loai" tabindex="0" aria-label="Thể loại">Thể loại</a></dt>
 			<div class={['nav-menu-item-dropdown', selectedItem === 1 ? 'grid' : '!hidden']}>
 				{#each categories as category (category._id)}
-					<dl>{category.name}</dl>
+					<dl>
+						<a href={`/the-loai/${category.slug}`} tabindex="0" aria-label={category.name}
+							>{category.name}</a
+						>
+					</dl>
 				{/each}
 			</div>
 		</li>
-		<li onmouseenter={() => setSelectedItem(2)} onmouseleave={() => setSelectedItem(0)}>
-			<dt>Quốc gia</dt>
+		<li
+			onmouseenter={() => setSelectedItem(2)}
+			onmouseleave={() => setSelectedItem(0)}
+			onfocusin={() => setSelectedItem(2)}
+			onfocusout={() => setSelectedItem(0)}
+		>
+			<dt><a href="/quoc-gia" tabindex="0" aria-label="Quốc gia">Quốc gia</a></dt>
 			<div class={['nav-menu-item-dropdown', selectedItem === 2 ? 'flex' : '!hidden']}>
 				{#each countries as country (country._id)}
-					<dl>{country.name}</dl>
+					<dl>
+						<a href={`/quoc-gia/${country.slug}`} tabindex="0" aria-label={country.name}
+							>{country.name}</a
+						>
+					</dl>
 				{/each}
 			</div>
 		</li>
-		<li onmouseenter={() => setSelectedItem(3)} onmouseleave={() => setSelectedItem(0)}>
-			<dt>Danh sách</dt>
+		<li
+			onmouseenter={() => setSelectedItem(3)}
+			onmouseleave={() => setSelectedItem(0)}
+			onfocusin={() => setSelectedItem(3)}
+			onfocusout={() => setSelectedItem(0)}
+		>
+			<dt><a href="danh-sach" tabindex="0" aria-label="Danh sách"> Danh sách</a></dt>
 			<div class={['nav-menu-item-dropdown', selectedItem === 3 ? 'flex' : '!hidden']}>
-				<dl>Phim lẻ</dl>
-				<dl>Phim bộ</dl>
-				<dl>Phim hoạt hình</dl>
-				<dl>TV show</dl>
+				<dl><a href="/danh-sach/phim-le" tabindex="0" aria-label="Phim lẻ">Phim lẻ</a></dl>
+				<dl><a href="/danh-sach/phim-bo" tabindex="0" aria-label="Phim bộ">Phim bộ</a></dl>
+				<dl>
+					<a href="/danh-sach/phim-hoat-hinh" tabindex="0" aria-label="Phim hoạt hình"
+						>Phim hoạt hình</a
+					>
+				</dl>
+				<dl><a href="/danh-sach/tv-show" tabindex="0" aria-label="TV show">TV show</a></dl>
 			</div>
 		</li>
 	</ul>
 	<div class="icons-group">
-		<span class="icon-[ic--outline-search]" role="button" aria-label="Tìm kiếm phim"></span>
+		<span class="icon-[ic--outline-search]" role="button" aria-label="Tìm kiếm phim" tabindex="0"
+		></span>
 		<span
 			class="icon-[material-symbols--bookmark]"
 			role="button"
 			aria-label="Danh sách xem sau"
-			onclick={() => bookmarkStore.toggleWatchList()}
+			onclick={() => bookmarkStore.toggleWatchList(true)}
 			tabindex="0"
-			onkeydown={() => bookmarkStore.toggleWatchList()}
+			onkeydown={() => bookmarkStore.toggleWatchList(true)}
 		></span>
 	</div>
 </nav>
@@ -81,7 +109,8 @@
 		@apply flex h-full cursor-pointer text-white;
 		& > li {
 			@apply h-full px-6 font-semibold transition-colors duration-150;
-			& > span,
+			& > a,
+			span,
 			dt {
 				line-height: 80px;
 			}

@@ -50,10 +50,11 @@ function createBookmarkStore() {
         return newState;
       });
     },
-    toggleWatchList : () => {
+    toggleWatchList : (show : boolean) => {
       if (!browser) return false;
       update(state => {
-        const newState = {...state , isShowWatchLater : !state.isShowWatchLater}
+        const newState = {...state , isShowWatchLater : show}
+        localStorage.setItem('bookmarks', JSON.stringify(newState));
         return newState
       })
     },
