@@ -75,3 +75,5 @@ export type MovieList = {
     APP_DOMAIN_CDN_IMAGE: string;
   };
 };
+
+export type MovieListItem = MovieList['data']['items'][number]

@@ -1,14 +1,11 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-	import CdnImage from '$lib/atoms/CdnImage.svelte';
 	import Breadcrumbs from '$lib/atoms/Breadcrumbs.svelte';
 	import Pagination from '$lib/atoms/Pagination.svelte';
-	import { goto } from '$app/navigation';
+	import MovieCardItem from '$lib/molecules/MovieCardItem.svelte';
 
 	const props: { data: PageData } = $props();
 	const { data } = props.data.movies;
-
-	console.log('data props', data);
 </script>
 
 <svelte:head>
@@ -31,49 +28,7 @@
 
 		<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
 			{#each data.items as film}
-				<article
-					class="film-card overflow-hidden rounded-lg bg-gray-800 transition-transform hover:scale-105"
-				>
-					<a
-						href={`/${film.slug}`}
-						class="block w-full text-left"
-						aria-label={`Xem phim ${film.name}`}
-						tabindex="0"
-					>
-						<div class="relative aspect-[2/3]">
-							<CdnImage
-								src={`${data.APP_DOMAIN_CDN_IMAGE}/uploads/movies/${film.thumb_url}`}
-								alt={film.name}
-								class="h-full w-full object-cover"
-								width={300}
-								height={450}
-								loading="lazy"
-							/>
-							{#if film.quality}
-								<span
-									class="absolute top-2 right-2 rounded bg-red-600 px-2 py-1 text-xs text-white"
-								>
-									{film.quality}
-								</span>
-							{/if}
-						</div>
-						<div class="p-3">
-							<h2 class="mb-1 line-clamp-2 text-sm font-semibold text-white">
-								{film.name}
-							</h2>
-							<div class="flex items-center gap-2 text-xs text-gray-400">
-								<span>{film.year}</span>
-								<span>•</span>
-								<span>{film.time}</span>
-							</div>
-							{#if film.episode_current}
-								<p class="mt-1 text-xs text-gray-400">
-									{film.episode_current}
-								</p>
-							{/if}
-						</div>
-					</a>
-				</article>
+				<MovieCardItem {film} cdnUrl={data.APP_DOMAIN_CDN_IMAGE} />
 			{/each}
 		</div>
 
@@ -97,11 +52,5 @@
 	}
 	.film-list {
 		@apply container mx-auto;
-	}
-	.film-card {
-		@apply cursor-pointer focus:ring-2 focus:ring-blue-500 focus:outline-none;
-	}
-	.film-card a:focus {
-		@apply ring-2 ring-teal-500 ring-offset-2 ring-offset-gray-900 outline-none;
 	}
 </style>

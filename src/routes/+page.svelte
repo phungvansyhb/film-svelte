@@ -35,12 +35,21 @@
 
 <svelte:head>
 	<title>{activeMovie.name} - Xem phim online</title>
-	<meta name="description" content={`Xem phim ${activeMovie.name} (${activeMovie.origin_name}) năm ${activeMovie.year} online miễn phí với chất lượng cao`} />
+	<meta
+		name="description"
+		content={`Xem phim ${activeMovie.name} (${activeMovie.origin_name}) năm ${activeMovie.year} online miễn phí với chất lượng cao`}
+	/>
 	<meta property="og:title" content={`${activeMovie.name} - Xem phim online`} />
-	<meta property="og:description" content={`Xem phim ${activeMovie.name} (${activeMovie.origin_name}) năm ${activeMovie.year} online miễn phí với chất lượng cao`} />
+	<meta
+		property="og:description"
+		content={`Xem phim ${activeMovie.name} (${activeMovie.origin_name}) năm ${activeMovie.year} online miễn phí với chất lượng cao`}
+	/>
 	<meta property="og:image" content={activeMovie.poster_url} />
 	<meta property="og:type" content="video.movie" />
-	<meta name="keywords" content={`xem phim ${activeMovie.name}, ${activeMovie.origin_name}, phim ${activeMovie.year}, phim mới`} />
+	<meta
+		name="keywords"
+		content={`xem phim ${activeMovie.name}, ${activeMovie.origin_name}, phim ${activeMovie.year}, phim mới`}
+	/>
 </svelte:head>
 
 <div class="background-container">
@@ -73,7 +82,6 @@
 			</div>
 		</div>
 		<div class="action-button-group">
-			<h3 class="text-2xl font-semibold text-white">Xem ngay</h3>
 			<a
 				href={activeMovie.slug}
 				aria-label={activeMovie.slug}
@@ -81,6 +89,7 @@
 			>
 				<Button size="lg" type="button" title="Xem phim">
 					<span class="icon-[solar--play-bold] text-3xl"></span>
+					<h3 class="ml-4 text-2xl font-semibold text-white">Xem ngay</h3>
 				</Button>
 			</a>
 		</div>

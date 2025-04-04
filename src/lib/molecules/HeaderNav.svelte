@@ -42,8 +42,11 @@
 			<div class={['nav-menu-item-dropdown', selectedItem === 1 ? 'grid' : '!hidden']}>
 				{#each categories as category (category._id)}
 					<dl>
-						<a href={`/the-loai/${category.slug}`} tabindex="0" aria-label={category.name}
-							>{category.name}</a
+						<a
+							href={`/the-loai/${category.slug}`}
+							data-sveltekit-reload
+							tabindex="0"
+							aria-label={category.name}>{category.name}</a
 						>
 					</dl>
 				{/each}
@@ -59,8 +62,11 @@
 			<div class={['nav-menu-item-dropdown', selectedItem === 2 ? 'flex' : '!hidden']}>
 				{#each countries as country (country._id)}
 					<dl>
-						<a href={`/quoc-gia/${country.slug}`} tabindex="0" aria-label={country.name}
-							>{country.name}</a
+						<a
+							href={`/quoc-gia/${country.slug}`}
+							data-sveltekit-reload
+							tabindex="0"
+							aria-label={country.name}>{country.name}</a
 						>
 					</dl>
 				{/each}
@@ -74,14 +80,29 @@
 		>
 			<dt><a href="danh-sach" tabindex="0" aria-label="Danh sách"> Danh sách</a></dt>
 			<div class={['nav-menu-item-dropdown', selectedItem === 3 ? 'flex' : '!hidden']}>
-				<dl><a href="/danh-sach/phim-le" tabindex="0" aria-label="Phim lẻ">Phim lẻ</a></dl>
-				<dl><a href="/danh-sach/phim-bo" tabindex="0" aria-label="Phim bộ">Phim bộ</a></dl>
 				<dl>
-					<a href="/danh-sach/phim-hoat-hinh" tabindex="0" aria-label="Phim hoạt hình"
-						>Phim hoạt hình</a
+					<a href="/danh-sach/phim-le" data-sveltekit-reload tabindex="0" aria-label="Phim lẻ"
+						>Phim lẻ</a
 					>
 				</dl>
-				<dl><a href="/danh-sach/tv-show" tabindex="0" aria-label="TV show">TV show</a></dl>
+				<dl>
+					<a href="/danh-sach/phim-bo" data-sveltekit-reload tabindex="0" aria-label="Phim bộ"
+						>Phim bộ</a
+					>
+				</dl>
+				<dl>
+					<a
+						href="/danh-sach/hoat-hinh"
+						data-sveltekit-reload
+						tabindex="0"
+						aria-label="Phim hoạt hình">Phim hoạt hình</a
+					>
+				</dl>
+				<dl>
+					<a href="/danh-sach/tv-shows" data-sveltekit-reload tabindex="0" aria-label="TV shows"
+						>TV show</a
+					>
+				</dl>
 			</div>
 		</li>
 	</ul>
@@ -102,7 +123,7 @@
 <style>
 	@reference "tailwindcss";
 	.nav-header {
-		@apply relative z-10 container mx-auto flex h-[80px] items-center justify-between;
+		@apply relative sticky top-0 z-10 container mx-auto flex h-[80px] items-center justify-between;
 		/* border-bottom: 1px solid rgba(255, 255, 255, 0.15); */
 	}
 
