@@ -24,14 +24,20 @@
 	function handleTabKey(event: KeyboardEvent) {
 		if (event.key !== 'Tab' || !modalRef) return;
 
-		const focusableElements = Array.from(modalRef.querySelectorAll(
-			'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-		)) as HTMLElement[];
-		
+		const focusableElements = Array.from(
+			modalRef.querySelectorAll(
+				'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+			)
+		) as HTMLElement[];
+
 		const currentIndex = focusableElements.indexOf(document.activeElement as HTMLElement);
-		const nextIndex = event.shiftKey 
-			? (currentIndex <= 0 ? focusableElements.length - 1 : currentIndex - 1)
-			: (currentIndex >= focusableElements.length - 1 ? 0 : currentIndex + 1);
+		const nextIndex = event.shiftKey
+			? currentIndex <= 0
+				? focusableElements.length - 1
+				: currentIndex - 1
+			: currentIndex >= focusableElements.length - 1
+				? 0
+				: currentIndex + 1;
 
 		focusableElements[nextIndex].focus();
 		event.preventDefault();
@@ -39,22 +45,19 @@
 
 	$effect(() => {
 		if (bookmarks.isShowWatchLater) {
-			// Focus close button when modal opens
 			closeButtonRef?.focus();
-			// Prevent scrolling on body
 			document.body.style.overflow = 'hidden';
 		} else {
-			// Restore scrolling when modal closes
 			document.body.style.overflow = '';
 		}
 	});
 </script>
 
-<svelte:window on:keydown={handleKeydown}/>
+<svelte:window on:keydown={handleKeydown} />
 
 {#if bookmarks.isShowWatchLater}
 	<div class="modal-overlay">
-		<div 
+		<div
 			class="modal-content"
 			bind:this={modalRef}
 			onkeydown={handleTabKey}
@@ -121,7 +124,7 @@
 	}
 
 	.modal-content {
-		@apply max-h-[80vh] w-full max-w-2xl overflow-hidden rounded-lg bg-gray-900;
+		@apply mx-2 max-h-[80vh] w-full max-w-2xl overflow-hidden rounded-lg bg-gray-900;
 	}
 
 	.modal-header {
@@ -137,7 +140,7 @@
 			@apply text-2xl;
 		}
 		&:focus {
-			@apply outline-none ring-2 ring-white  rounded;
+			@apply rounded ring-2 ring-white outline-none;
 		}
 	}
 
