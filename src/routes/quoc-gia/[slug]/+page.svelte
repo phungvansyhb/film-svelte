@@ -3,9 +3,33 @@
 	import Breadcrumbs from '$lib/atoms/Breadcrumbs.svelte';
 	import Pagination from '$lib/atoms/Pagination.svelte';
 	import MovieCardItem from '$lib/molecules/MovieCardItem.svelte';
+	import qs from 'qs';
 
 	const props: { data: PageData } = $props();
 	const { data } = props.data.movies;
+
+	let sortField = $state('');
+	let selectedYear = $state('');
+
+	$effect(() => {
+		sortField = (qs.parse(window.location.search.slice(1)).sort_field as string) || '';
+		selectedYear = (qs.parse(window.location.search.slice(1)).year as string) || '';
+	});
+
+	async function handleSearch() {
+		const currentParams = qs.parse(window.location.search.slice(1));
+		const newParams = {
+			...currentParams,
+			sort_field: sortField || undefined,
+			year: selectedYear || undefined
+		};
+		const queryString = qs.stringify(newParams, { skipNulls: true });
+		const newUrl = new URL(window.location.href);
+		newUrl.search = queryString;
+		const link = document.createElement('a');
+		link.href = newUrl.toString();
+		link.click();
+	}
 </script>
 
 <svelte:head>
@@ -24,7 +48,45 @@
 <main class="main-body">
 	<section class="film-list">
 		<Breadcrumbs items={data.breadCrumb} />
-		<h1 class="mt-6 mb-6 text-3xl font-bold text-white">{data.titlePage}</h1>
+		<div class="mt-6 mb-6 flex items-center justify-between">
+			<h1 class="text-3xl font-bold text-white">{data.titlePage}</h1>
+			<div class="flex items-center gap-4">
+				<select
+					class="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-white focus:border-teal-500 focus:outline-none"
+					bind:value={sortField}
+					aria-label="Sắp xếp theo"
+					tabindex="0"
+				>
+					<option value="" selected={sortField === ''}>Sắp xếp theo</option>
+					<option value="modified.time" selected={sortField === 'modified.time'}>Mới nhất</option>
+					<option value="tmdb.vote_average" selected={sortField === 'tmdb.vote_average'}
+						>Đánh giá</option
+					>
+					<option value="view" selected={sortField === 'view'}>Nhiều lượt xem</option>
+				</select>
+				<select
+					class="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-white focus:border-teal-500 focus:outline-none"
+					bind:value={selectedYear}
+					aria-label="Năm"
+					tabindex="0"
+				>
+					<option value="" selected={selectedYear === ''}>Tất cả năm</option>
+					{#each Array.from({ length: 24 }, (_, i) => new Date().getFullYear() - i) as year}
+						<option value={year.toString()} selected={selectedYear === year.toString()}
+							>{year}</option
+						>
+					{/each}
+				</select>
+				<button
+					type="button"
+					class="cursor-pointer rounded-lg bg-teal-600 px-6 py-2 text-white transition-colors duration-200 hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-gray-900 focus:outline-none"
+					aria-label="Search"
+					onclick={handleSearch}
+				>
+					Tìm kiếm
+				</button>
+			</div>
+		</div>
 
 		<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
 			{#each data.items as film}

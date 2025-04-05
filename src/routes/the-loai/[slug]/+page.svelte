@@ -10,24 +10,27 @@
 	import qs from 'qs';
 	import { goto } from '$app/navigation';
 
-	let searchQuery = $state('');
+	let sortField = $state('');
 	let selectedYear = $state('');
 
-	function handleSearch() {
+	$effect(() => {
+		sortField = (qs.parse(window.location.search.slice(1)).sort_field as string) || '';
+		selectedYear = (qs.parse(window.location.search.slice(1)).year as string) || '';
+	});
+
+	async function handleSearch() {
 		const currentParams = qs.parse(window.location.search.slice(1));
 		const newParams = {
 			...currentParams,
-			keyword: searchQuery || undefined,
+			sort_field: sortField || undefined,
 			year: selectedYear || undefined
 		};
 		const queryString = qs.stringify(newParams, { skipNulls: true });
-		goto(`${window.location.pathname}${queryString ? `?${queryString}` : ''}`);
-	}
-
-	function handleKeyPress(event: KeyboardEvent) {
-		if (event.key === 'Enter') {
-			handleSearch();
-		}
+		const newUrl = new URL(window.location.href);
+		newUrl.search = queryString;
+		const link = document.createElement('a');
+		link.href = newUrl.toString();
+		link.click();
 	}
 </script>
 
@@ -50,26 +53,30 @@
 		<div class="mt-6 mb-6 flex items-center justify-between">
 			<h1 class="text-3xl font-bold text-white">{data.titlePage}</h1>
 			<div class="flex items-center gap-4">
-				<div class="relative">
-					<input
-						type="text"
-						placeholder="Search movies..."
-						class="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-white focus:border-teal-500 focus:outline-none"
-						aria-label="Search movies"
-						bind:value={searchQuery}
-						onkeydown={handleKeyPress}
-					/>
-					<span
-						class="icon-[ic--outline-search] absolute top-1/2 right-3 -translate-y-1/2 text-gray-400"
-					></span>
-				</div>
+				<select
+					class="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-white focus:border-teal-500 focus:outline-none"
+					bind:value={sortField}
+					aria-label="Sắp xếp theo"
+					tabindex="0"
+				>
+					<option value="" selected={sortField === ''}>Sắp xếp theo</option>
+					<option value="modified.time" selected={sortField === 'modified.time'}>Mới nhất</option>
+					<option value="tmdb.vote_average" selected={sortField === 'tmdb.vote_average'}
+						>Đánh giá</option
+					>
+					<option value="view" selected={sortField === 'view'}>Nhiều lượt xem</option>
+				</select>
 				<select
 					class="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-white focus:border-teal-500 focus:outline-none"
 					bind:value={selectedYear}
+					aria-label="Năm"
+					tabindex="0"
 				>
-					<option value="">All Years</option>
+					<option value="" selected={selectedYear === ''}>Tất cả năm</option>
 					{#each Array.from({ length: 24 }, (_, i) => new Date().getFullYear() - i) as year}
-						<option value={year}>{year}</option>
+						<option value={year.toString()} selected={selectedYear === year.toString()}
+							>{year}</option
+						>
 					{/each}
 				</select>
 				<button
@@ -78,7 +85,7 @@
 					aria-label="Search"
 					onclick={handleSearch}
 				>
-					Search
+					Tìm kiếm
 				</button>
 			</div>
 		</div>
