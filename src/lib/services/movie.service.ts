@@ -50,7 +50,7 @@ export async function getListMovieByType(type: string, params: Partial<ParamsSea
 	}
 }
 
-export async function getListMovieDetail(slug: string) {
+export async function getMovieDetail(slug: string) {
 	try {
 		const response = await fetch(`https://ophim1.com/v1/api/phim/${slug}`);
 		const data = (await response.json()) as MovieDetail;

@@ -65,15 +65,18 @@
 			<br />
 			<desc class="pt-6 text-2xl opacity-75">( {activeMovie.origin_name} )</desc>
 
-			<div class="mt-8 flex items-end gap-2">
-				<span class="font-bold">
-					{activeMovie.tmdb.vote_average.toPrecision(2)}
-				</span>
-				<span class="icon-[material-symbols--star-rounded] star-icon"></span>
+			<div class="mt-8 flex flex-col items-start gap-2 md:flex-row">
+				<div class="flex items-center gap-2">
+					<span class="font-bold">
+						{activeMovie.tmdb.vote_average.toPrecision(2)}
+					</span>
+					<span class="icon-[material-symbols--star-rounded] star-icon"></span>
+				</div>
+
 				<span class="opacity-75">/ {activeMovie.tmdb.vote_count} đánh giá</span>
 				<span class="opacity-75">/ {activeMovie.year} </span>
 				<button
-					class="ml-2 cursor-pointer rounded px-2 hover:bg-gray-900"
+					class="cursor-pointer rounded px-2 hover:bg-gray-900"
 					tabindex="0"
 					aria-label={isInWatchLater(activeMovie._id) ? 'Đã thích' : '+ Thêm vào xem sau'}
 					onclick={toggleWatchLater}
@@ -127,7 +130,7 @@
 	}
 
 	.background-fullpage-holder {
-		@apply flex flex-col justify-between py-24;
+		@apply flex flex-col justify-between py-24 pl-4 md:pl-0;
 		position: relative;
 		height: calc(100vh - 80px);
 	}

@@ -38,7 +38,12 @@
 	const { countries, categories, showSearchModal }: HeaderDataProps = $props();
 </script>
 
-<header class={['scrolled sticky top-0 z-10']}>
+<header
+	class={[
+		'relative top-0 left-0 z-1 w-screen shadow-lg backdrop-blur-xs',
+		isMobileMenuOpen ? 'bg-slate-900' : 'bg-slate-900/10'
+	]}
+>
 	<nav class={['nav-header']}>
 		<div class="nav-logo-container">
 			<a href="/" onclick={closeMobileMenu} tabindex="0" aria-label="Trang chủ">
@@ -83,11 +88,7 @@
 					onfocusin={() => setSelectedItem(1)}
 					onfocusout={() => setSelectedItem(0)}
 				>
-					<dt>
-						<a href="/the-loai" onclick={closeMobileMenu} tabindex="0" aria-label="Thể loại"
-							>Thể loại</a
-						>
-					</dt>
+					<dt>Thể loại</dt>
 					<div class={['nav-menu-item-dropdown', selectedItem === 1 ? 'grid' : '!hidden']}>
 						{#each categories as category (category._id)}
 							<dl>
@@ -108,11 +109,7 @@
 					onfocusin={() => setSelectedItem(2)}
 					onfocusout={() => setSelectedItem(0)}
 				>
-					<dt>
-						<a href="/quoc-gia" onclick={closeMobileMenu} tabindex="0" aria-label="Quốc gia"
-							>Quốc gia</a
-						>
-					</dt>
+					<dt>Quốc gia</dt>
 					<div class={['nav-menu-item-dropdown', selectedItem === 2 ? 'flex' : '!hidden']}>
 						{#each countries as country (country._id)}
 							<dl>
@@ -133,11 +130,7 @@
 					onfocusin={() => setSelectedItem(3)}
 					onfocusout={() => setSelectedItem(0)}
 				>
-					<dt>
-						<a href="danh-sach" onclick={closeMobileMenu} tabindex="0" aria-label="Danh sách">
-							Danh sách</a
-						>
-					</dt>
+					<dt>Danh sách</dt>
 					<div class={['nav-menu-item-dropdown', selectedItem === 3 ? 'flex' : '!hidden']}>
 						<dl>
 							<a
@@ -196,9 +189,7 @@
 
 <style>
 	@reference "tailwindcss";
-	.scrolled {
-		@apply bg-gray-900/10 shadow-lg backdrop-blur-xs;
-	}
+
 	.nav-header {
 		@apply relative top-0 z-10 container mx-auto flex h-[80px] items-center justify-between transition-all duration-300;
 	}
@@ -212,25 +203,25 @@
 	}
 
 	.mobile-icon-button {
-		@apply rounded-lg p-2 text-2xl text-white hover:bg-gray-800 focus:ring-2 focus:ring-teal-500 focus:outline-none;
+		@apply rounded-lg p-2 text-2xl text-white hover:bg-gray-800;
 	}
 
 	.mobile-menu-button {
-		@apply rounded-lg p-2 text-2xl text-white hover:bg-gray-800 focus:ring-2 focus:ring-teal-500 focus:outline-none;
+		@apply rounded-lg p-2 text-2xl text-white hover:bg-gray-800;
 	}
 
 	.nav-menu-container {
-		@apply hidden flex-1 items-center justify-between md:flex;
+		@apply hidden flex-1 items-center justify-between md:flex md:pl-4;
 	}
 
 	.mobile-menu-open {
-		@apply absolute top-[80px] right-0 left-0 flex flex-col border-t border-gray-700 bg-gray-900 shadow-lg;
+		@apply absolute top-[80px] right-0 left-0 flex flex-col items-start border-t border-gray-700 bg-gray-900 shadow-lg;
 	}
 
 	.nav-menu {
 		@apply flex h-full cursor-pointer flex-col text-white md:flex-row;
 		& > li {
-			@apply h-full px-6 font-semibold transition-colors duration-150;
+			@apply h-full px-6 font-medium transition-colors duration-150;
 			& > a,
 			dt {
 				@apply block py-4 md:py-0 md:leading-[80px];
@@ -256,7 +247,7 @@
 	}
 
 	.icons-group {
-		@apply flex gap-4 p-4 md:p-0;
+		@apply hidden gap-4 p-4 md:flex md:p-0;
 		span {
 			@apply cursor-pointer text-2xl text-white;
 		}

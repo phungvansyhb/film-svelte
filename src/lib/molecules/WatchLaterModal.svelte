@@ -86,7 +86,13 @@
 				{:else}
 					<div class="movie-list">
 						{#each bookmarks.watchLater as movie (movie._id)}
-							<div class="movie-item">
+							<a
+								href={`/${movie.slug}`}
+								tabindex="0"
+								aria-label={movie.name}
+								class="movie-item"
+								onclick={() => bookmarkStore.toggleWatchList(false)}
+							>
 								<img src={movie.thumb_url} alt={movie.name} class="movie-thumbnail" />
 								<div class="movie-info">
 									<h3>{movie.name}</h3>
@@ -107,7 +113,7 @@
 								>
 									<span class="icon-[material-symbols--delete]"></span>
 								</button>
-							</div>
+							</a>
 						{/each}
 					</div>
 				{/if}

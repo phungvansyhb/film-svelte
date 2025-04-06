@@ -71,7 +71,7 @@
 
 	function navigateToMovie(slug: string) {
 		onClose();
-		goto(`/phim/${slug}`);
+		goto(`/${slug}`);
 	}
 
 	function goToPage(page: number) {

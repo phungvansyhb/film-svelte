@@ -5,8 +5,9 @@
 	import MoviePlay from '$lib/organism/movieDetail/MoviePlay.svelte';
 	import type { PageData } from './$types';
 	import type { Episode } from '$lib/typeDefs/MovieDetailContext.type';
+	import type { MovieDetail } from '$lib/typeDefs/MovieDetail.type';
 
-	const { data }: { data: PageData } = $props();
+	const { data }: { data: MovieDetail } = $props();
 
 	let currentServer = $state(
 		data.data.item.episodes && data.data.item.episodes.length > 0
@@ -19,22 +20,13 @@
 			: null
 	);
 
-	let videoSourceType = $state<'m3u8' | 'embeded'>('embeded');
 
-	let showM3U8Note = $state(false);
 
 	function playEpisode(episode: Episode) {
 		currentEpisode = episode;
-		videoSourceType = 'embeded';
-		showM3U8Note = false;
 	}
 
-	function toggleVideoSource() {
-		videoSourceType = videoSourceType === 'embeded' ? 'm3u8' : 'embeded';
-		if (videoSourceType === 'm3u8') {
-			showM3U8Note = true;
-		}
-	}
+	
 </script>
 
 <svelte:head>
@@ -70,9 +62,6 @@
 			<MoviePlay
 				movieName={data.data.item.name}
 				{currentEpisode}
-				{videoSourceType}
-				{toggleVideoSource}
-				{showM3U8Note}
 				poster={`https://img.ophim.live/uploads/movies/${data.data.item.poster_url}`}
 			/>
 			<MovieEpisode data={data.data.item.episodes} {currentEpisode} {currentServer} {playEpisode} />

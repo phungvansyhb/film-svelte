@@ -3,7 +3,6 @@
 		src: string;
 		poster?: string;
 		title?: string;
-		autoplay?: boolean;
 		controls?: boolean;
 		width?: number;
 		height?: number;
@@ -13,31 +12,19 @@
 		src,
 		poster = '',
 		title = '',
-		autoplay = false,
+
 		controls = true,
 		width = 16,
 		height = 9
 	}: VideoPlayerProps = $props();
 
 	let iframeElement = $state<HTMLIFrameElement | null>(null);
-	let videoElement = $state<HTMLVideoElement | null>(null);
 	let errorMessage = $state('');
-
-	const isM3U8 = $derived(src.includes('.m3u8'));
 
 	const videoSrc = (() => {
 		try {
 			new URL(src);
-			if (isM3U8) {
-				return src;
-			}
-			const autoplayParam = autoplay ? '1' : '0';
-
-			if (src.includes('?')) {
-				return `${src}&autoplay=${autoplayParam}`;
-			} else {
-				return `${src}?autoplay=${autoplayParam}`;
-			}
+			return `${src}?autoplay=0`;
 		} catch (e) {
 			errorMessage = `Invalid URL: ${src}`;
 			console.error('Invalid video URL:', src);
@@ -48,11 +35,6 @@
 	function handleIframeError() {
 		errorMessage = 'Failed to load video. Please check the URL or try again later.';
 		console.error('Video iframe failed to load:', src);
-	}
-
-	function handleVideoError() {
-		errorMessage = 'Failed to load video. Please check the URL or try again later.';
-		console.error('Video element failed to load:', src);
 	}
 </script>
 
@@ -69,34 +51,22 @@
 			</div>
 		</div>
 	{:else if videoSrc}
-		<div class="relative h-full w-full">
-			{#if isM3U8}
-				<!-- For m3u8 links, use a video element -->
-				<video
-					bind:this={videoElement}
-					class="h-full w-full"
-					{controls}
-					{autoplay}
-					{poster}
-					onerror={handleVideoError}
-				>
-					<source src={videoSrc} type="application/x-mpegURL" />
-					<track kind="captions" src="" label="English" srclang="en" default />
-					Your browser does not support the video tag.
-				</video>
-			{:else}
-				<!-- For embed links, use an iframe -->
-				<iframe
-					bind:this={iframeElement}
-					{title}
-					src={videoSrc}
-					allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen; autoplay"
-					allowfullscreen
-					class="h-full w-full"
-					loading="lazy"
-					onerror={handleIframeError}
-				></iframe>
-			{/if}
+		<div class="group relative h-full w-full">
+			<div
+				class="absolute top-0 left-0 z-10 hidden h-10 w-full bg-slate-900/10 p-2 group-hover:block"
+			>
+				<h2 class="text-xl text-white">{title}</h2>
+			</div>
+			<iframe
+				bind:this={iframeElement}
+				{title}
+				src={videoSrc}
+				allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen; autoplay"
+				allowfullscreen
+				class="h-full w-full"
+				loading="lazy"
+				onerror={handleIframeError}
+			></iframe>
 		</div>
 	{:else}
 		<div class="flex h-full items-center justify-center bg-gray-800 p-4 text-center text-white">
