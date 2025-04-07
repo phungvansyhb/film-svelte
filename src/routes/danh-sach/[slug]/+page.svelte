@@ -48,8 +48,10 @@
 <main class="main-body">
 	<section class="film-list">
 		<Breadcrumbs items={data.breadCrumb} />
-		<div class="mt-6 mb-6 flex items-center justify-between">
-			<h1 class="text-3xl font-bold text-white">{data.titlePage}</h1>
+		<div
+			class="mt-6 mb-6 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center"
+		>
+			<h1 class="text-base font-bold text-white md:text-3xl">{data.titlePage}</h1>
 			<div class="flex items-center gap-4">
 				<select
 					class="rounded-lg border border-gray-700 bg-gray-800 px-4 py-2 text-white focus:border-teal-500 focus:outline-none"
@@ -79,11 +81,12 @@
 				</select>
 				<button
 					type="button"
-					class="cursor-pointer rounded-lg bg-teal-600 px-6 py-2 text-white transition-colors duration-200 hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-gray-900 focus:outline-none"
+					class="cursor-pointer rounded-lg bg-teal-600 px-4 py-2 text-white transition-colors duration-200 hover:bg-teal-700 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-gray-900 focus:outline-none md:px-6"
 					aria-label="Search"
 					onclick={handleSearch}
 				>
-					Tìm kiếm
+					<span class=" hidden md:block">Tìm kiếm</span>
+					<span class="icon-[ic--round-search] block text-2xl md:hidden"></span>
 				</button>
 			</div>
 		</div>
