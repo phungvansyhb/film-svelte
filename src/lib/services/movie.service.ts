@@ -70,3 +70,58 @@ export async function searchMovie(keyword: string, params: Partial<ParamsSearch>
 		return e;
 	}
 }
+
+export interface Movie {
+	_id: string;
+	name: string;
+	slug: string;
+	modified: {
+		time: string;
+	};
+}
+
+export interface MovieResponse {
+	data: {
+		items: Movie[];
+		pagination: {
+			totalItems: number;
+			totalItemsPerPage: number;
+			currentPage: number;
+			totalPages: number;
+		};
+	};
+}
+
+export interface MovieParams {
+	page?: number;
+	limit?: number;
+	category?: string;
+	country?: string;
+	type?: string;
+}
+
+export async function fetchMovies(params: MovieParams = {}): Promise<MovieResponse> {
+	const { page = 1, limit = 24, category, country, type } = params;
+
+	let url = `https://ophim1.com/v1/api/tim-kiem?page=${page}&limit=${limit}`;
+
+	if (category) {
+		url += `&category=${category}`;
+	}
+
+	if (country) {
+		url += `&country=${country}`;
+	}
+
+	if (type) {
+		url += `&type=${type}`;
+	}
+
+	const response = await fetch(url);
+
+	if (!response.ok) {
+		throw new Error('Failed to fetch movies');
+	}
+
+	return response.json();
+}
